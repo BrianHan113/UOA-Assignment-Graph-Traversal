@@ -7,6 +7,7 @@ public class MapEngine {
 
   public MapEngine() {
     // add other code here if you want
+
     loadMap(); // keep this mehtod invocation
   }
 
@@ -14,7 +15,7 @@ public class MapEngine {
   private void loadMap() {
     List<String> countries = Utils.readCountries();
     List<String> adjacencies = Utils.readAdjacencies();
-    // add code here to create your data structures
+    System.out.println((countries.get(0)).split(",")[0]);
   }
 
   /** this method is invoked when the user run the command info-country. */
