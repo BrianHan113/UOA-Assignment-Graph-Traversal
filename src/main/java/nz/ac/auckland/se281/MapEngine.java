@@ -40,11 +40,18 @@ public class MapEngine {
         worldGraph.addEdge(countryMap.get(rootCountry), countryMap.get(countriesNames[i]));
       }
     }
+
+    // System.out.println(worldGraph.map);
   }
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
-    // add code here
+    MessageCli.INSERT_COUNTRY.printMessage();
+    String inputCountry = Utils.scanner.nextLine();
+
+    Country country = countryMap.get(Utils.capitalizeFirstLetterOfEachWord(inputCountry));
+    MessageCli.COUNTRY_INFO.printMessage(
+        country.getName(), country.getContinent(), Integer.toString(country.getTaxRate()));
   }
 
   /** this method is invoked when the user run the command route. */
