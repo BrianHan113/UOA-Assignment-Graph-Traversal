@@ -12,9 +12,9 @@ public class MapEngine {
   private Map<String, Country> countryMap;
   private Graph<Country> worldGraph;
 
+  /** Constructor for the MapEngine class. */
   public MapEngine() {
-    // HashSet is ideal for checking if an element is in it
-    countryMap = new HashMap<>();
+    countryMap = new HashMap<>(); // Hashmap gets country by String input easy, and O(1)
     worldGraph = new Graph<>();
 
     loadMap(); // keep this mehtod invocation
@@ -33,6 +33,7 @@ public class MapEngine {
       countryMap.put(country[0], newCountry);
     }
 
+    // Make country edges
     for (String adjacency : adjacencies) {
       String[] countriesNames = adjacency.split(",");
 
@@ -42,21 +43,22 @@ public class MapEngine {
         worldGraph.addEdge(countryMap.get(rootCountry), countryMap.get(countriesNames[i]));
       }
     }
-
-    // System.out.println(worldGraph.map);
   }
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
 
+    // Loop until a valid country is entered by user
     while (true) {
       try {
         MessageCli.INSERT_COUNTRY.printMessage();
         Country country = getUserInputCountry();
+
+        // Print country info
         MessageCli.COUNTRY_INFO.printMessage(
             country.getName(), country.getContinent(), Integer.toString(country.getTaxRate()));
         break;
-      } catch (CountryNotFound e) {
+      } catch (CountryNotFoundException e) {
         System.out.println(e.getMessage());
       }
     }
@@ -69,8 +71,10 @@ public class MapEngine {
     Country destinationCountry = null;
     Boolean firstInputValid = false;
 
+    // Loop until two valid countries are entered by user
     while (true) {
       try {
+        // Dont ask for the first country again if it was valid
         if (!firstInputValid) {
           MessageCli.INSERT_SOURCE.printMessage();
           startCountry = getUserInputCountry();
@@ -81,13 +85,14 @@ public class MapEngine {
         destinationCountry = getUserInputCountry();
 
         break;
-      } catch (CountryNotFound e) {
+      } catch (CountryNotFoundException e) {
         System.out.println(e.getMessage());
       }
     }
 
     List<Country> fastestRoute = worldGraph.findPathBetween(startCountry, destinationCountry);
 
+    // If the fastest route is only one country, no cross-border travel is required
     if (fastestRoute.size() == 1) {
       MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
       return;
@@ -95,13 +100,14 @@ public class MapEngine {
 
     MessageCli.ROUTE_INFO.printMessage(fastestRoute.toString());
 
-    // Set to avoid duplicates, linked to preserve order
-    Set<String> continents = new LinkedHashSet<>();
+    // Find all continents visited
+    Set<String> continents = new LinkedHashSet<>(); // Set: avoid duplicates linked: preserve order
     for (Country country : fastestRoute) {
       continents.add(country.getContinent());
     }
     MessageCli.CONTINENT_INFO.printMessage(continents.toString());
 
+    // Calculate total tax
     int totalTax = 0;
     for (int i = 1; i < fastestRoute.size(); i++) { // Start from 1 to skip the first country taxes
       totalTax += fastestRoute.get(i).getTaxRate();
@@ -109,20 +115,24 @@ public class MapEngine {
     MessageCli.TAX_INFO.printMessage(Integer.toString(totalTax));
   }
 
-  private Country getUserInputCountry() throws CountryNotFound {
+  /**
+   * Get user input country and return the corresponsding country object
+   *
+   * @return the Country object corresponding to the user input
+   * @throws CountryNotFoundException if the country corresponding to the user input doesnt exist in
+   *     the worldMap
+   */
+  private Country getUserInputCountry() throws CountryNotFoundException {
 
+    // Capitalize first letter of each word from input
     String inputCountry = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
     Country country = countryMap.get(inputCountry);
+
+    // If country is not found, throw custom exception
     if (country == null) {
-      throw new CountryNotFound(inputCountry);
+      throw new CountryNotFoundException(inputCountry);
     }
 
     return country;
-  }
-}
-
-class CountryNotFound extends Exception {
-  public CountryNotFound(String countryName) {
-    super(MessageCli.INVALID_COUNTRY.getMessage(countryName));
   }
 }

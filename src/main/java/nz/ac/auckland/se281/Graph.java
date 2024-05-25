@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+/** Represents a graph data structure. */
 public class Graph<T> {
 
   private Map<T, List<T>> adjacencyMap;
@@ -16,10 +17,21 @@ public class Graph<T> {
     this.adjacencyMap = new HashMap<>();
   }
 
+  /**
+   * Adds a vertex to the graph.
+   *
+   * @param node The node to add.
+   */
   public void addVertex(T node) {
     adjacencyMap.putIfAbsent(node, new LinkedList<>());
   }
 
+  /**
+   * Adds an edge between two nodes in the graph.
+   *
+   * @param node1 The first node.
+   * @param node2 The second node.
+   */
   public void addEdge(T node1, T node2) {
     addVertex(node1);
     addVertex(node2);
@@ -29,6 +41,13 @@ public class Graph<T> {
     adjacencyMap.get(node1).add(node2);
   }
 
+  /**
+   * Finds the shortest path between two nodes in the graph using breadth-first search.
+   *
+   * @param start The starting node.
+   * @param end The ending node.
+   * @return The path between the two nodes.
+   */
   public List<T> findPathBetween(T start, T end) { // TODO: Return path of cheapest cost
     Set<T> visited = new HashSet<>();
     Queue<T> queue = new LinkedList<>();
