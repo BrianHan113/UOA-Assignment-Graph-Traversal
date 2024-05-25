@@ -1,8 +1,10 @@
 package nz.ac.auckland.se281;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /** This class is the main entry point. */
 public class MapEngine {
@@ -86,6 +88,13 @@ public class MapEngine {
 
     List<Country> fastestRoute = worldGraph.findPathBetween(startCountry, destinationCountry);
     MessageCli.ROUTE_INFO.printMessage(fastestRoute.toString());
+
+    // Set to avoid duplicates, linked to preserve order
+    Set<String> continents = new LinkedHashSet<>();
+    for (Country country : fastestRoute) {
+      continents.add(country.getContinent());
+    }
+    MessageCli.CONTINENT_INFO.printMessage(continents.toString());
   }
 
   private Country getUserInputCountry() throws CountryNotFound {
