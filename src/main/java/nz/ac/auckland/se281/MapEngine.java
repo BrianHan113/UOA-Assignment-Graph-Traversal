@@ -116,11 +116,11 @@ public class MapEngine {
   }
 
   /**
-   * Get user input country and return the corresponsding country object
+   * Get user input country and return the corresponsding country object.
    *
-   * @return the Country object corresponding to the user input
+   * @return the Country object corresponding to the user input.
    * @throws CountryNotFoundException if the country corresponding to the user input doesnt exist in
-   *     the worldMap
+   *     the worldMap.
    */
   private Country getUserInputCountry() throws CountryNotFoundException {
 
