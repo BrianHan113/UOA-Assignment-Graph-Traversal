@@ -64,6 +64,6 @@ public class Country {
 
   @Override
   public String toString() {
-    return "Country [name=" + name + ", continent=" + continent + ", taxRate=" + taxRate + "]";
+    return name;
   }
 }

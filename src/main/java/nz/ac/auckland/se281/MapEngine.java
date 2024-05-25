@@ -83,6 +83,9 @@ public class MapEngine {
         System.out.println(e.getMessage());
       }
     }
+
+    List<Country> fastestRoute = worldGraph.findPathBetween(startCountry, destinationCountry);
+    MessageCli.ROUTE_INFO.printMessage(fastestRoute.toString());
   }
 
   private Country getUserInputCountry() throws CountryNotFound {
