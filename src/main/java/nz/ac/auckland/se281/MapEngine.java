@@ -49,6 +49,7 @@ public class MapEngine {
 
     while (true) {
       try {
+        MessageCli.INSERT_COUNTRY.printMessage();
         Country country = getUserInputCountry();
         MessageCli.COUNTRY_INFO.printMessage(
             country.getName(), country.getContinent(), Integer.toString(country.getTaxRate()));
@@ -60,12 +61,33 @@ public class MapEngine {
   }
 
   /** this method is invoked when the user run the command route. */
-  public void showRoute() {}
+  public void showRoute() {
+
+    Country startCountry = null;
+    Country destinationCountry = null;
+    Boolean firstInputValid = false;
+
+    while (true) {
+      try {
+        if (!firstInputValid) {
+          MessageCli.INSERT_SOURCE.printMessage();
+          startCountry = getUserInputCountry();
+        }
+        firstInputValid = true;
+
+        MessageCli.INSERT_DESTINATION.printMessage();
+        destinationCountry = getUserInputCountry();
+
+        break;
+      } catch (CountryNotFound e) {
+        System.out.println(e.getMessage());
+      }
+    }
+  }
 
   private Country getUserInputCountry() throws CountryNotFound {
-    MessageCli.INSERT_COUNTRY.printMessage();
-    String inputCountry = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
 
+    String inputCountry = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
     Country country = countryMap.get(inputCountry);
     if (country == null) {
       throw new CountryNotFound(inputCountry);
