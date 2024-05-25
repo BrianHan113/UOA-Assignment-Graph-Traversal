@@ -95,6 +95,12 @@ public class MapEngine {
       continents.add(country.getContinent());
     }
     MessageCli.CONTINENT_INFO.printMessage(continents.toString());
+
+    int totalTax = 0;
+    for (int i = 1; i < fastestRoute.size(); i++) { // Start from 1 to skip the first country taxes
+      totalTax += fastestRoute.get(i).getTaxRate();
+    }
+    MessageCli.TAX_INFO.printMessage(Integer.toString(totalTax));
   }
 
   private Country getUserInputCountry() throws CountryNotFound {
