@@ -87,6 +87,12 @@ public class MapEngine {
     }
 
     List<Country> fastestRoute = worldGraph.findPathBetween(startCountry, destinationCountry);
+
+    if (fastestRoute.size() == 1) {
+      MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
+      return;
+    }
+
     MessageCli.ROUTE_INFO.printMessage(fastestRoute.toString());
 
     // Set to avoid duplicates, linked to preserve order
